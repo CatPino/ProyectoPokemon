@@ -44,15 +44,12 @@ export default function DetailPage() {
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
-        <Link href="/home" className="underline">← Volver</Link>
+        <Link href="/home" className="underline">Volver</Link>
 
         <button
-          onClick={onToggleFav}
-          className={`rounded-xl px-4 py-2 border ${
-            fav ? "bg-yellow-100" : "hover:bg-gray-50"
-          }`}
-        >
-          {fav ? "✅ Capturado" : "⭐ Capturar"}
+          onClick={onToggleFav} className={`rounded-xl px-4 py-2 border ${
+            fav ? "bg-yellow-100 text-black" : "hover:bg-gray-50"}`}>
+          {fav ? " Capturado" : "Capturar"}
         </button>
       </div>
 
@@ -72,7 +69,7 @@ export default function DetailPage() {
       )}
 
       {!loading && data && (
-        <div className="mt-8 rounded-2xl border bg-white p-6 shadow-sm">
+        <div className="mt-8 rounded-2xl border bg-black p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row gap-6 sm:items-center">
             <div className="w-40 h-40 rounded-2xl border bg-white flex items-center justify-center overflow-hidden">
               <img
@@ -84,15 +81,10 @@ export default function DetailPage() {
 
             <div className="flex-1">
               <h1 className="text-3xl font-bold capitalize">{data.name}</h1>
-              <p className="text-sm text-gray-500 mt-1">ID: {data.id}</p>
-
               <div className="mt-4 flex flex-wrap gap-2">
                 {data.types.map((t) => (
-                  <span
-                    key={t}
-                    className="px-3 py-1 rounded-full border text-sm capitalize"
-                  >
-                    {t}
+                  <span key={t}
+                    className="px-3 py-1 rounded-full border text-sm capitalize">{t}
                   </span>
                 ))}
               </div>

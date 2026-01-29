@@ -1,17 +1,30 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getPokemonFromBackend, PokemonDetail } from "../app/lib/api";
 
-export default function SearchBar() {
+type Props = {
+  onResult: (pokemon: PokemonDetail | null) => void;
+};
+
+export default function SearchBar({ onResult }: Props) {
   const [value, setValue] = useState("");
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-  const onSearch = (e: React.FormEvent) => {
+  const onSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     const name = value.trim().toLowerCase();
     if (!name) return;
-    router.push(`/detail/${encodeURIComponent(name)}`);
+
+    setLoading(true);
+    try {
+      const data = await getPokemonFromBackend(name);
+      onResult(data); 
+    } catch {
+      onResult(null); 
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -19,11 +32,14 @@ export default function SearchBar() {
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Buscar por nombre (ej: pikachu)"
+        placeholder="Buscar por nombre"
         className="flex-1 rounded-xl border px-4 py-2"
       />
-      <button className="rounded-xl border px-4 py-2 hover:bg-gray-100">
-        Buscar
+      <button
+        disabled={loading}
+        className="rounded-xl border px-4 py-2 hover:bg-gray-100 disabled:opacity-50"
+      >
+        {loading ? "Buscando..." : "Buscar"}
       </button>
     </form>
   );
